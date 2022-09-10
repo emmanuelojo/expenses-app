@@ -16,6 +16,7 @@ module.exports = {
       gridTemplateColumns: {
         "auto-1fr": "auto 1fr",
         "n-2auto": "repeat(2,auto)",
+        "n-5fr": "1fr 1fr 1fr 1fr 1fr",
       },
       colors: {
         "n-white-sec": "rgb(212,209,209)",

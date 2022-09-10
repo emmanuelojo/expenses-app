@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 import Home from "../views/Home.vue";
-import Edit from "../views/EditExpense.vue";
+import EditTransaction from "../views/EditTransaction.vue";
 import Login from "../views/Login.vue";
 import Register from "../views/Register.vue";
 
@@ -25,9 +25,9 @@ const routes = [
     meta: { requiresAuth: true },
   },
   {
-    path: "/edit/:id",
-    name: "Edit",
-    component: Edit,
+    path: "/transactions/:id",
+    name: "EditTransaction",
+    component: EditTransaction,
     params: true,
     // component: () => import('../views/EditExpense.vue')
     meta: { requiresAuth: true },

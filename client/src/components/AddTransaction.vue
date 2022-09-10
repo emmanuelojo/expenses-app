@@ -103,12 +103,12 @@ const amount = ref("");
 
 const selected = ref("");
 
-const date = ref(new Date().toISOString());
+const date = ref(new Date().toISOString().split("T")[0]);
 
 const transactions = transactionsStore.getters.transactions;
 
 const numberOfTransactions = computed(() => {
-  return transactions.value.length;
+  return transactions.value.transactions.length;
 });
 
 const handleSubmit = async () => {

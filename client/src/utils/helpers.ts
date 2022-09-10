@@ -54,7 +54,7 @@ export const shortDate = (date: string | Date) => {
   }`;
 };
 
-export const formatDate = (date: Date | number) => {
+export const formatDate = (date: Date | string | number) => {
   const newDate = new Intl.DateTimeFormat("en-ng").format(new Date(date));
 
   const suffix = nth(newDate.split(" ")[0]);
@@ -70,6 +70,16 @@ export const formatTime = (date: Date | number) => {
   }).format(new Date(date));
 
   const suffix = nth(newDate.split(" ")[0]);
+
+  return newDate;
+};
+
+export const rearrangedDate = (date: string | Date) => {
+  const newDate = new Intl.DateTimeFormat("en-ng", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  }).format(new Date(date));
 
   return newDate;
 };
@@ -90,6 +100,10 @@ export const decrypt = (text: string) => {
 
 export const getToken = () => {
   return localStorage.getItem("expenseToken");
+};
+
+export const getUser = (name: string) => {
+  return localStorage[name];
 };
 
 export const remove = (name: string) => {

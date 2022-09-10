@@ -5,8 +5,8 @@ export interface Transaction {
   amount: number;
   transactionType: string;
   transactionDate: Date | string;
-  createdAt: Date | string;
-  updatedAt: Date | string;
-  __v: number;
-  userId: string;
+  createdAt?: Date | string;
+  updatedAt?: Date | string;
+  __v?: number;
+  userId?: string;
 }

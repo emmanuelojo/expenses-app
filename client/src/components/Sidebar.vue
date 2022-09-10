@@ -2,9 +2,11 @@
 import { ref, onMounted, watch } from "vue";
 import store from "../store/transactionsStore";
 import authStore from "../store/authStore";
-import { decrypt, getUserInfo, logout } from "../utils/helpers";
+import { logout } from "../utils/helpers";
 
 onMounted(() => {
+  authStore.actions.getUser();
+
   let bodyElement = document.body;
   bodyElement.classList.add("app-background");
 
@@ -22,9 +24,6 @@ onMounted(() => {
     htmlElement.setAttribute("theme", "light");
     darkMode.value = false;
   }
-
-  // username.value = getUserInfo()
-  // username.value = decrypt(user.value.username);
 });
 
 const darkMode = ref(false);
@@ -55,9 +54,6 @@ const sidebarTabs = ref([
 const sidebarStatus = ref(store.getters.sidebarStatus);
 
 const user = ref(authStore.getters.user);
-const username = ref("JohnDoe");
-
-console.log("user : ", username.value);
 
 const toggleSidebar = () => {
   store.mutations.setSidebar(!sidebarStatus.value);
@@ -81,17 +77,10 @@ const toggleSidebar = () => {
       </p>
     </div>
 
-    <div class="grid gap-4 px-4 mb-4">
-      <!-- <div
-        class="bg-n-bg-sec text-n-grey-text flex justify-center items-center gap-4 rounded-md py-2"
-      >
-        <i v-if="sidebarStatus" class="fa fa-sun-o"></i>
-        <i v-else class="fa fa-moon-o"></i>
-      </div> -->
-
+    <div class="grid gap-4 mb-4">
       <div
         @click="toggleSidebar"
-        class="flex justify-center items-center text-n-gray text-xs font-semibold cursor-pointer"
+        class="px-4 flex justify-center items-center text-n-gray text-xs font-semibold cursor-pointer"
       >
         <span v-if="darkMode" class="material-symbols-outlined">
           light_mode
@@ -99,16 +88,20 @@ const toggleSidebar = () => {
         <span v-else class="material-symbols-outlined"> dark_mode </span>
       </div>
 
-      <div @click="logout" class="mx-auto text-n-gray cursor-pointer">
+      <div @click="logout" class="mx-auto px-4 text-n-gray cursor-pointer">
         <span class="material-symbols-outlined"> logout </span>
       </div>
 
-      <div class="pt-10 border-t border-white">
+      <div class="pt-5 flex justify-center items-center border-t border-white">
         <div
           class="w-10 h-10 rounded-full bg-n-bg-sec flex justify-center items-center"
         >
-          <!-- <p class="uppercase text-white">{{ user.username.charAt(0) }}</p> -->
-          <p class="uppercase text-sm text-white">{{ username.charAt(0) }}</p>
+          <!-- <p class="uppercase text-white">{{ user.username }}</p> -->
+          <img
+            src="https://i.pravatar.cc/300"
+            alt="Profile Image"
+            class="text-[8px] h-10 w-10 rounded-full object-cover"
+          />
         </div>
       </div>
     </div>

@@ -2,7 +2,7 @@ import { computed, reactive, readonly } from "vue";
 import { LoginResponse } from "../types/authTypeResponse";
 import authApi from "../network/authApi";
 import { User } from "../models/User";
-import { encrypt } from "../utils/helpers";
+import { encrypt, decrypt, getUser } from "../utils/helpers";
 
 interface AuthStore {
   token: string | null;
@@ -50,6 +50,12 @@ const actions = {
         message: result.message,
       };
     }
+  },
+
+  getUser: () => {
+    const decryptedUserData = decrypt(getUser("user"));
+
+    mutations.setUser(JSON.parse(decryptedUserData));
   },
 };
 

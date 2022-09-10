@@ -1,5 +1,9 @@
 <script lang="ts" setup>
-// import { Transaction } from "../models/Transaction";
+import { ref } from "vue";
+import { formatCurrency, rearrangedDate } from "../utils/helpers";
+import Modal from "./Modal.vue";
+import EditTransaction from "../views/EditTransaction.vue";
+
 interface Transaction {
   _id: string;
   title: string;
@@ -17,11 +21,27 @@ const props = withDefaults(defineProps<Transaction>(), {
   transactionType: "",
   transactionDate: "2022-09-03",
 });
+
+const showEditTransactionModal = ref(false);
+
+const selectedTransaction = ref({
+  _id: props._id,
+  title: props.title,
+  customer: props.customer,
+  amount: props.amount,
+  transactionType: props.transactionType,
+  transactionDate: props.transactionDate,
+});
+
+const openDetails = () => {
+  showEditTransactionModal.value = true;
+};
 </script>
 
 <template>
   <div
-    class="bg-n-bg-sec p-3 flex flex-col sm:flex-row sm:items-center sm:justify-between rounded-md cursor-pointer"
+    @click="openDetails"
+    class="bg-n-bg-sec p-3 flex flex-col sm:grid sm:grid-cols-n-5fr sm:place-content-between rounded-md cursor-pointer"
   >
     <div class="flex justify-between items-center">
       <p class="text-sm text-white font-semibold">#RT8093</p>
@@ -30,8 +50,8 @@ const props = withDefaults(defineProps<Transaction>(), {
 
     <div class="mt-4 sm:mt-0 flex justify-between items-center">
       <div>
-        <p class="text-sm text-n-gray">{{ transactionDate }}</p>
-        <p class="sm:hidden text-lg text-white font-semibold">{{ amount }}</p>
+        <p class="text-sm text-n-gray">{{ rearrangedDate(transactionDate) }}</p>
+        <p class="sm:hidden text-lg text-white font-semibold"></p>
       </div>
       <div
         class="w-20 h-8 sm:hidden flex items-center justify-center gap-1 rounded-md"
@@ -52,15 +72,17 @@ const props = withDefaults(defineProps<Transaction>(), {
       </div>
     </div>
 
-    <div>
+    <div class="flex items-center">
       <p class="hidden sm:block text-sm text-n-gray">{{ customer }}</p>
     </div>
 
     <div class="hidden sm:block">
-      <p class="text-lg text-white font-semibold">{{ amount }}</p>
+      <p class="text-lg text-white font-semibold">
+        {{ formatCurrency("en-ng", Number(amount), "NGN") }}
+      </p>
     </div>
 
-    <div class="hidden sm:flex items-center gap-3">
+    <div class="hidden sm:flex sm:justify-end items-center gap-3">
       <div
         class="w-20 h-8 flex items-center justify-center gap-1 rounded-md"
         :class="transactionType === 'Credit' ? 'bg-n-bg-green' : 'bg-red-200'"
@@ -83,5 +105,16 @@ const props = withDefaults(defineProps<Transaction>(), {
         <span class="material-symbols-outlined text-sm"> chevron_right </span>
       </div>
     </div>
+
+    <Modal
+      v-if="showEditTransactionModal"
+      title="Edit Transaction"
+      @close-modal="showEditTransactionModal = false"
+    >
+      <EditTransaction
+        :transaction="selectedTransaction"
+        @success="showEditTransactionModal = false"
+      />
+    </Modal>
   </div>
 </template>

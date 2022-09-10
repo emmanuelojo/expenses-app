@@ -48,23 +48,37 @@
         <label for="">Date</label>
         <input
           type="date"
-          v-model="transaction.transactionDate"
+          v-model="formattedDate"
           class="form-control"
           required
         />
       </div>
 
-      <button type="submit" class="mt-5">
-        <p class="font-semibold">Add</p>
+      <button type="submit" class="mt-5 flex justify-center items-center gap-2">
+        <i v-if="loading" class="fa fa-spinner fa-spin text-white"></i>
+
+        <p class="font-semibold">
+          {{ loading ? "Updating" : "Update" }}
+        </p>
       </button>
     </form>
+
+    <Toast v-if="showToastModal" @close-modal="showToastModal = false">
+      <SingleToast
+        :desc="toastMsg"
+        :toastType="toastType"
+        @close-modal="showToastModal = false"
+      />
+    </Toast>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { defineComponent, PropType, reactive } from "vue";
+import { defineComponent, PropType, ref, reactive } from "vue";
 import transactionsStore from "../store/transactionsStore";
 import { Transaction } from "../models/Transaction";
+import Toast from "../components/Toast.vue";
+import SingleToast from "../components/SingleToast.vue";
 
 interface Props {
   transaction: Transaction;
@@ -74,17 +88,48 @@ const props = defineProps<Props>();
 
 const emit = defineEmits(["success"]);
 
+const showToastModal = ref(false);
+
+const loading = ref(false);
+
+const toastMsg = ref("");
+
+const toastType = ref("");
+
+const formattedDate = ref(
+  props.transaction.transactionDate.toString().split("T")[0]
+);
+
 const form = reactive({
   title: props.transaction.title,
   customer: props.transaction.customer,
   amount: props.transaction.amount,
   type: props.transaction.transactionType,
-  date: props.transaction.transactionDate,
+  date: formattedDate.value,
 });
 
 const handleSubmit = () => {
-  // transactionsStore.actions.editTransaction(props.transaction._id, props.transaction);
-  emit("success");
+  loading.value = true;
+
+  transactionsStore.actions
+    .editTransaction(props.transaction._id, props.transaction)
+    .then((res) => {
+      loading.value = false;
+
+      if (res.success) {
+        toastMsg.value = "Transaction updated successfully";
+        toastType.value = "success";
+        showToastModal.value = true;
+
+        setTimeout(() => {
+          emit("success");
+        }, 5000);
+      } else {
+        toastMsg.value = res.message;
+        toastType.value = "danger";
+        showToastModal.value = true;
+      }
+    });
 };
 </script>
 
@@ -121,7 +166,7 @@ form .form-group input {
 form .form-group select {
   height: 2.5rem;
   width: 100%;
-  border: 1px solid #ced4da;
+  border: 1px solid #000;
   outline: none;
   border-radius: 0.25rem;
   padding: 0 0.5rem;

@@ -64,14 +64,70 @@ export const createTransaction = async (req, res, next) => {
 export const getAllTransactions = async (req, res, next) => {
   try {
     const userId = req.user._id;
+    const page = parseInt(req.query.page) - 1 || 0;
+    const limit = parseInt(req.query.limit) || 5;
+    const searchTerm = req.query.searchTerm || "";
+    let transactionType = req.query.type || "All";
 
-    const transations = await Transaction.find({ userId }).sort({
-      createdAt: -1,
+    const transactionTypeOptions = ["Credit", "Debit"];
+
+    transactionType === "All"
+      ? (transactionType = [...transactionTypeOptions])
+      : (transactionType = req.query.type.split(","));
+
+    const transactions = await Transaction.find({
+      userId,
+      title: { $regex: searchTerm, $options: "i" },
+    })
+      .where("transactionType")
+      .in([...transactionType])
+      .skip(page * limit)
+      .limit(limit)
+      .sort({ createdAt: -1 });
+
+    const total = await Transaction.countDocuments({
+      userId,
+      transactionType: { $in: [...transactionType] },
+      title: { $regex: searchTerm, $options: "i" },
     });
+
+    // const transactions = await Transaction.find({ userId }).sort({
+    //   createdAt: -1,
+    // });
+
+    // let transactions;
+    // const queryTerm = req.query.type;
+
+    // if (queryTerm) {
+    //   console.log("query term BE: ", queryTerm);
+    //   // transactions = (await Transaction.find({ userId })).filter(
+    //   //   (transaction) => {
+    //   //     transaction.transactionType == queryTerm;
+    //   //   }
+    //   // );
+    //   transactions = (
+    //     await Transaction.find({ userId }, { transactionType: queryTerm })
+    //   ).sort({
+    //     createdAt: -1,
+    //   });
+    // } else {
+    //   transactions = await Transaction.find({ userId }).sort({
+    //     createdAt: -1,
+    //   });
+    // }
 
     res.status(200).json({
       code: 200,
-      data: transations,
+      data: {
+        pagination: {
+          total: total,
+          currentPage: page + 1,
+          perPage: 20,
+          totalPages: Math.ceil(total / 20),
+          limit,
+        },
+        transactions: transactions,
+      },
       message: "Success",
     });
   } catch (error) {

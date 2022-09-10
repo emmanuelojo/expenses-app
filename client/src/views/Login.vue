@@ -1,25 +1,29 @@
 <template>
-  <div class="flex justify-center w-[90vw] md:w-[70vw]">
+  <div class="flex justify-center items-center h-screen w-[90vw] md:w-[70vw]">
     <div class="w-full md:w-96 px-3 py-4 grid gap-4">
       <p class="uppercase text-2xl font-semibold">Sign in</p>
-      <input
-        type="text"
-        placeholder="username"
-        class="py-2 pl-1 bg-transparent text-n-black placeholder:text-n-gray placeholder:pl-1 border border-n-black outline-none"
-        v-model="username"
-      />
-      <input
-        type="password"
-        placeholder="password"
-        class="py-2 pl-1 bg-transparent text-n-black placeholder:text-n-gray placeholder:pl-1 border border-n-black outline-none"
-        v-model="password"
-      />
-      <p
-        @click="handleSubmit"
-        class="uppercase bg-green-800 text-white px-8 py-3 w-fit cursor-pointer"
-      >
-        Login
-      </p>
+
+      <form @submit.prevent="handleSubmit" class="grid gap-4">
+        <input
+          type="text"
+          placeholder="username"
+          class="py-2 pl-1 bg-transparent text-n-black placeholder:text-n-gray placeholder:pl-1 border border-n-black outline-none"
+          v-model="username"
+          autofocus
+        />
+        <input
+          type="password"
+          placeholder="password"
+          class="py-2 pl-1 bg-transparent text-n-black placeholder:text-n-gray placeholder:pl-1 border border-n-black outline-none"
+          v-model="password"
+        />
+        <button
+          @click=""
+          class="uppercase bg-green-800 text-white px-8 py-3 w-fit cursor-pointer"
+        >
+          Login
+        </button>
+      </form>
       <p class="uppercase underline text-xs cursor-pointer">
         do not remember password?
       </p>

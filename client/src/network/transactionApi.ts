@@ -13,10 +13,15 @@ export default {
     });
   },
 
-  getTransactions() {
+  getTransactions(page: number, type?: string, searchTerm?: string) {
     const token = getToken();
 
     return axios.get("http://127.0.0.1:4000/api/v1/transactions", {
+      params: {
+        page,
+        type,
+        searchTerm,
+      },
       headers: {
         Authorization: `Bearer ${token}`,
       },

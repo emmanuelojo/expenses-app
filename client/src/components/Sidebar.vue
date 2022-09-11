@@ -68,13 +68,19 @@ const toggleSidebar = () => {
     ]"
     class="h-screen border flex flex-col justify-between"
   >
-    <div>
-      <p
-        class="uppercase text-center pt-5 pb-10 font-bold"
-        :class="darkMode ? 'text-white' : 'text-n-darker-blue'"
-      >
-        Logo
-      </p>
+    <div class="flex flex-col gap-4">
+      <router-link to="/">
+        <p
+          class="uppercase text-center pt-5 pb-10 font-bold"
+          :class="darkMode ? 'text-white' : 'text-n-darker-blue'"
+        >
+          Logo
+        </p>
+      </router-link>
+
+      <router-link to="/chart" class="text-white flex justify-center"
+        ><i class="fa fa-line-chart"></i>
+      </router-link>
     </div>
 
     <div class="grid gap-4 mb-4">

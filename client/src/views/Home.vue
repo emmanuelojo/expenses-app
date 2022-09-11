@@ -1,10 +1,6 @@
 <template>
-  <div class="grid md:grid-cols-auto-1fr bg-n-bg h-screen overflow-auto">
-    <div class="hidden md:block">
-      <Sidebar :showSidebar="true" />
-    </div>
+  <div>
     <div>
-      <Navbar />
       <div
         class="px-4 lg:px-10 pt-10 w-full 2xl:max-w-[1024px] 2xl:mx-auto h-screen overflow-auto"
       >

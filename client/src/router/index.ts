@@ -3,6 +3,7 @@ import Home from "../views/Home.vue";
 import EditTransaction from "../views/EditTransaction.vue";
 import Login from "../views/Login.vue";
 import Register from "../views/Register.vue";
+import Chart from "../views/Chart.vue";
 
 const routes = [
   {
@@ -21,7 +22,6 @@ const routes = [
     path: "/",
     name: "Home",
     component: Home,
-    // component: () => import('../views/Home.vue')
     meta: { requiresAuth: true },
   },
   {
@@ -29,17 +29,15 @@ const routes = [
     name: "EditTransaction",
     component: EditTransaction,
     params: true,
-    // component: () => import('../views/EditExpense.vue')
     meta: { requiresAuth: true },
   },
-  // {
-  //   path: '/about',
-  //   name: 'About',
-  //   // route level code-splitting
-  //   // this generates a separate chunk (about.[hash].js) for this route
-  //   // which is lazy-loaded when the route is visited.
-  //   component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
-  // }
+  {
+    path: "/chart",
+    name: "Chart",
+    component: Chart,
+    params: true,
+    meta: { requiresAuth: true },
+  },
 ];
 
 const router = createRouter({
